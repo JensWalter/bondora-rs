@@ -1,0 +1,51 @@
+# MyInvestmentsRequest
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**loan_issued_date_from** | **String** | Loan issued start date from | [optional] [default to null]
+**loan_issued_date_to** | **String** | Loan issued start date to | [optional] [default to null]
+**principal_min** | **f64** | Remaining principal amount min | [optional] [default to null]
+**principal_max** | **f64** | Remaining principal amount max | [optional] [default to null]
+**interest_min** | **f64** | Interest rate min | [optional] [default to null]
+**interest_max** | **f64** | Interest rate max | [optional] [default to null]
+**length_max** | **i32** | Loan lenght min | [optional] [default to null]
+**length_min** | **i32** | Loan lenght max | [optional] [default to null]
+**late_principal_amount_min** | **f64** | Principal debt amount min | [optional] [default to null]
+**late_principal_amount_max** | **f64** | Principal debt amount max | [optional] [default to null]
+**debt_occured_on_from** | **String** | Principal debt started date from | [optional] [default to null]
+**debt_occured_on_to** | **String** | Principal debt started date to | [optional] [default to null]
+**debt_occured_on_for_secondary_from** | **String** | Interest debt started date from | [optional] [default to null]
+**debt_occured_on_for_secondary_to** | **String** | Interest debt started date to | [optional] [default to null]
+**defaulted_date_from** | **String** | Defaulted date from | [optional] [default to null]
+**defaulted_date_to** | **String** | Defaulted date to | [optional] [default to null]
+**rescheduled_from** | **String** | Defaulted date from | [optional] [default to null]
+**rescheduled_to** | **String** | Defaulted date to | [optional] [default to null]
+**sold_date_from** | **String** | When it was sold on Secondary market from | [optional] [default to null]
+**sold_date_to** | **String** | When it was sold on Secondary market to | [optional] [default to null]
+**purchase_date_from** | **String** | When you received the investment Auctions/Secondary market from | [optional] [default to null]
+**purchase_date_to** | **String** | When you received the investment Auctions/Secondary market to | [optional] [default to null]
+**next_payment_date_to** | **String** | Next payment date to | [optional] [default to null]
+**next_payment_date_from** | **String** | Next payment date from | [optional] [default to null]
+**last_payment_date_from** | **String** | Last payment date from | [optional] [default to null]
+**last_payment_date_to** | **String** | Last payment date to | [optional] [default to null]
+**countries** | **Vec<String>** | Two letter iso code for country of origin: EE, ES, FI | [optional] [default to null]
+**ratings** | **Vec<String>** | Bondora&#39;s rating: AA, A, B, C, D, E, F, HR | [optional] [default to null]
+**credit_score_min** | **i32** | Minimum credit score | [optional] [default to null]
+**credit_score_max** | **i32** | Maximum credit score | [optional] [default to null]
+**user_name** | **String** | Borrower&#39;s username | [optional] [default to null]
+**loan_status_code** | **Vec<i32>** | Loan status code  &lt;para&gt;0 Reserved&lt;/para&gt;&lt;para&gt;2 Current&lt;/para&gt;&lt;para&gt;3 Cancelled&lt;/para&gt;&lt;para&gt;100 Overdue&lt;/para&gt;&lt;para&gt;5 60+ days overdue&lt;/para&gt;&lt;para&gt;4 Repaid&lt;/para&gt;&lt;para&gt;8 Released&lt;/para&gt; | [optional] [default to null]
+**income_verification_status** | **i32** | Income verification type | [optional] [default to null]
+**loan_debt_management_stage** | **i32** | Latest debt management stage | [optional] [default to null]
+**loan_debt_management_stage_type** | **i32** | Latest debt management stage type | [optional] [default to null]
+**loan_debt_management_date_active_from** | **String** | Latest debt management date active from | [optional] [default to null]
+**loan_debt_management_date_active_to** | **String** | Latest debt management date active to | [optional] [default to null]
+**auction_bid_type** | **i32** | Auction bid type | [optional] [default to null]
+**sales_status** | **i32** | Second market sale status  &lt;para&gt;NULL All active&lt;/para&gt;&lt;para&gt;0 Bought investments&lt;/para&gt;&lt;para&gt;1 Sold investments&lt;/para&gt;&lt;para&gt;2 Investment is on sale&lt;/para&gt;&lt;para&gt;3 Investment is not on sale&lt;/para&gt; | [optional] [default to null]
+**is_in_repayment** | **bool** | Search only active in repayment loans, StatusCodes (2, 5, 100) | [optional] [default to null]
+**page_size** | **i32** | Max items in result, up to 50000 | [optional] [default to null]
+**page_nr** | **i32** | Result page nr | [optional] [default to null]
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

@@ -1,0 +1,19 @@
+[package]
+name = "bondora"
+version = "0.1.0"
+edition = "2021"
+authors = ["Jens Walter <jens@apimeister.com>"]
+license = "Apache-2.0"
+
+[dependencies]
+serde = "1.0"
+serde_derive = "1.0"
+serde_yaml = "0.8"
+serde_json = "1.0"
+base64 = "0.13"
+futures = "0.3"
+hyper = { version = "0.14", features = ["full"] }
+hyper-rustls = { version = "0.23.0", feature = ["http2"] }
+tokio = { version = "1", features = ["full"] }
+url = "2"
+async-trait = "0.1"
