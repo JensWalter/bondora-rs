@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use hyper;
 use serde_json;
-use crate::apis::client::APIClient;
+use crate::apis::APIClient;
 use crate::models::ApiResult;
 use crate::models::ApiResultBid;
 use crate::models::ApiResultBids;
@@ -20,12 +20,12 @@ pub trait BidApi {
 impl BidApi for APIClient {
     async fn bid_cancel_bid(&self, id: &str) -> Result<ApiResult,String> {
 
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::POST)
             .header(header::AUTHORIZATION, format!("Bearer {token}"));
 
-        let uri_str = format!("{}/api/v1/bid/{id}/cancel", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/bid/{id}/cancel", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -54,12 +54,12 @@ impl BidApi for APIClient {
 
     async fn bid_get_bid(&self, id: &str) -> Result<ApiResultBid,String> {
 
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::GET)
             .header(header::AUTHORIZATION, format!("Bearer {token}"));
 
-        let uri_str = format!("{}/api/v1/bid/{id}", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/bid/{id}", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -89,7 +89,7 @@ impl BidApi for APIClient {
     async fn bid_get_bid_summaries(&self, request_bid_status_code: i32, request_start_date: String, request_end_date: String, request_page_size: i32, request_page_nr: i32)
      -> Result<ApiResultBids,String> {
 
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::GET)
             .header(header::AUTHORIZATION, format!("Bearer {token}"));
@@ -103,7 +103,7 @@ impl BidApi for APIClient {
             query.append_pair("request.pageNr", &request_page_nr.to_string());
             query.finish()
         };
-        let uri_str = format!("{}/api/v1/bids?{}", self.configuration.base_path, query_string);
+        let uri_str = format!("{}/api/v1/bids?{}", self.base_path, query_string);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -133,13 +133,13 @@ impl BidApi for APIClient {
     async fn bid_make_bids(&self, bid_request: crate::models::BidRequest)
      -> Result<ApiResultMakeBids,String> {
 
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::POST)
             .header(header::AUTHORIZATION, format!("Bearer {token}"))
             .header(header::CONTENT_TYPE, "application/json");
 
-        let uri_str = format!("{}/api/v1/bid", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/bid", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         let serialized = serde_json::to_string(&bid_request).unwrap();
@@ -148,13 +148,7 @@ impl BidApi for APIClient {
 
         let req = builder.body(hyper::Body::from(serialized)).unwrap();
 
-        let https = hyper_rustls::HttpsConnectorBuilder::new()
-            .with_native_roots()
-            .https_only()
-            .enable_http1().build();
-
-        let client = hyper::Client::builder().build(https);
-        let resp = client.request(req).await;
+        let resp = self.client.request(req).await;
 
         match resp {
             Ok(mut resp) => {

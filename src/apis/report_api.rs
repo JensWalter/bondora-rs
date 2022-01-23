@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use hyper;
 use serde_json;
-use crate::apis::client::APIClient;
+use crate::apis::APIClient;
 use crate::models::ApiResultReport;
 use crate::models::ApiResultCreateReport;
 use crate::models::ApiResultReportList;
@@ -21,13 +21,13 @@ pub trait ReportApi {
 impl ReportApi for APIClient {
     async fn report_generate_report(&self, request: crate::models::ReportCreateRequest) -> Result<ApiResultCreateReport,String> {
         
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::POST)
             .header(header::AUTHORIZATION, format!("Bearer {token}"))
             .header(header::CONTENT_TYPE, "application/json");
 
-        let uri_str = format!("{}/api/v1/report", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/report", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         let serialized = serde_json::to_string(&request).unwrap();
@@ -60,7 +60,7 @@ impl ReportApi for APIClient {
     async fn report_get_public_dataset(&self, request_loan_ids: Vec<String>, request_countries: Vec<String>, request_ratings: Vec<String>, request_loan_date_from: String, request_loan_date_to: String, request_page_size: i32, request_page_nr: i32)
      -> Result<ApiResultPublicDataset,String> {
 
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::GET)
             .header(header::AUTHORIZATION, format!("Bearer {token}"));
@@ -76,7 +76,7 @@ impl ReportApi for APIClient {
             query.append_pair("request.pageNr", &request_page_nr.to_string());
             query.finish()
         };
-        let uri_str = format!("{}/api/v1/publicdataset?{}", self.configuration.base_path, query_string);
+        let uri_str = format!("{}/api/v1/publicdataset?{}", self.base_path, query_string);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -105,12 +105,12 @@ impl ReportApi for APIClient {
 
     async fn report_get_report(&self, id: &str) -> Result<ApiResultReport,String> {
 
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::GET)
             .header(header::AUTHORIZATION, format!("Bearer {token}"));
 
-        let uri_str = format!("{}/api/v1/report/{id}", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/report/{id}", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -139,24 +139,18 @@ impl ReportApi for APIClient {
 
     async fn report_get_report_list(&self, ) -> Result<ApiResultReportList,String> {
 
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::GET)
             .header(header::AUTHORIZATION, format!("Bearer {token}"));
 
-        let uri_str = format!("{}/api/v1/reports", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/reports", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
         let req = builder.body(hyper::Body::empty()).unwrap();
 
-        let https = hyper_rustls::HttpsConnectorBuilder::new()
-            .with_native_roots()
-            .https_only()
-            .enable_http1().build();
-
-        let client = hyper::Client::builder().build(https);
-        let resp = client.request(req).await;
+        let resp = self.client.request(req).await;
 
         match resp {
             Ok(mut resp) => {

@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Jens Walter <jens@apimeister.com>"]
 license = "Apache-2.0"
+description = "Bondora API client"
 
 [dependencies]
 serde = "1.0"

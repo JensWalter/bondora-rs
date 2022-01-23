@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use hyper;
 use serde_json;
-use crate::apis::client::APIClient;
+use crate::apis::APIClient;
 use crate::models::ApiResult;
 use crate::models::ApiResultLoanPartDetails;
 use crate::models::ApiResultSecondMarket;
@@ -42,13 +42,13 @@ impl SecondMarketApi for APIClient {
     async fn second_market_buy(&self, buy_request: crate::models::SecondMarketBuyRequest)
      -> Result<ApiResult,String> {
 
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::POST)
             .header(header::AUTHORIZATION, format!("Bearer {token}"))
             .header(header::CONTENT_TYPE, "application/json");
 
-        let uri_str = format!("{}/api/v1/secondarymarket/buy", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/secondarymarket/buy", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         let serialized = serde_json::to_string(&buy_request).unwrap();
@@ -57,13 +57,7 @@ impl SecondMarketApi for APIClient {
 
         let req = builder.body(hyper::Body::from(serialized)).unwrap();
 
-        let https = hyper_rustls::HttpsConnectorBuilder::new()
-            .with_native_roots()
-            .https_only()
-            .enable_http1().build();
-
-        let client = hyper::Client::builder().build(https);
-        let resp = client.request(req).await;
+        let resp = self.client.request(req).await;
 
         match resp {
             Ok(mut resp) => {
@@ -80,13 +74,13 @@ impl SecondMarketApi for APIClient {
 
     async fn second_market_cancel(&self, id: &str) -> Result<ApiResult,String> {
 
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::POST)
             .header(header::AUTHORIZATION, format!("Bearer {token}"))
             .header(header::CONTENT_TYPE, "application/json");
 
-        let uri_str = format!("{}/api/v1/secondarymarket/{id}/cancel", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/secondarymarket/{id}/cancel", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -115,13 +109,13 @@ impl SecondMarketApi for APIClient {
 
     async fn second_market_cancel_multiple(&self, cancel_request: crate::models::SecondMarketCancelRequest) -> Result<ApiResult,String> {
         
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::POST)
             .header(header::AUTHORIZATION, format!("Bearer {token}"))
             .header(header::CONTENT_TYPE, "application/json");
 
-        let uri_str = format!("{}/api/v1/secondarymarket/cancel", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/secondarymarket/cancel", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         let serialized = serde_json::to_string(&cancel_request).unwrap();
@@ -156,7 +150,7 @@ impl SecondMarketApi for APIClient {
         let mut builder = hyper::Request::builder()
             .method(Method::GET);
 
-        let uri_str = format!("{}/api/v1/loanpart/{id}", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/loanpart/{id}", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -244,7 +238,7 @@ impl SecondMarketApi for APIClient {
             query.append_pair("request.pageNr", &request_page_nr.to_string());
             query.finish()
         };
-        let uri_str = format!("{}/api/v1/secondarymarket?{}", self.configuration.base_path, query_string);
+        let uri_str = format!("{}/api/v1/secondarymarket?{}", self.base_path, query_string);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -276,19 +270,13 @@ impl SecondMarketApi for APIClient {
         let mut builder = hyper::Request::builder()
             .method(Method::GET);
 
-        let uri_str = format!("{}/api/v1/secondarymarket/{id}", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/secondarymarket/{id}", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
         let req = builder.body(hyper::Body::empty()).unwrap();
 
-        let https = hyper_rustls::HttpsConnectorBuilder::new()
-            .with_native_roots()
-            .https_only()
-            .enable_http1().build();
-
-        let client = hyper::Client::builder().build(https);
-        let resp = client.request(req).await;
+        let resp = self.client.request(req).await;
 
         match resp {
             Ok(mut resp) => {
@@ -313,7 +301,7 @@ impl SecondMarketApi for APIClient {
             query.append_pair("request.itemIds", &request_item_ids.join(",").to_string());
             query.finish()
         };
-        let uri_str = format!("{}/api/v1/secondarymarket/list?{}", self.configuration.base_path, query_string);
+        let uri_str = format!("{}/api/v1/secondarymarket/list?{}", self.base_path, query_string);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -342,13 +330,13 @@ impl SecondMarketApi for APIClient {
 
     async fn second_market_get_item_list2(&self, request: crate::models::SecondMarketListingRequest) -> Result<ApiResultSecondMarketItemSummaryList,String> {
         
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::POST)
             .header(header::AUTHORIZATION, format!("Bearer {token}"))
             .header(header::CONTENT_TYPE, "application/json");
 
-        let uri_str = format!("{}/api/v1/secondarymarket/list", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/secondarymarket/list", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         let serialized = serde_json::to_string(&request).unwrap();
@@ -388,7 +376,7 @@ impl SecondMarketApi for APIClient {
             query.append_pair("request.itemIds", &request_item_ids.join(",").to_string());
             query.finish()
         };
-        let uri_str = format!("{}/api/v1/loanpart/list?{}", self.configuration.base_path, query_string);
+        let uri_str = format!("{}/api/v1/loanpart/list?{}", self.base_path, query_string);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -417,13 +405,13 @@ impl SecondMarketApi for APIClient {
 
     async fn second_market_get_list2(&self, request: crate::models::LoanPartDetailsRequest) -> Result<ApiResultLoanPartDetailsList,String> {
         
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::POST)
             .header(header::AUTHORIZATION, format!("Bearer {token}"))
             .header(header::CONTENT_TYPE, "application/json");
 
-        let uri_str = format!("{}/api/v1/loanpart/list", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/loanpart/list", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         let serialized = serde_json::to_string(&request).unwrap();
@@ -455,13 +443,13 @@ impl SecondMarketApi for APIClient {
 
     async fn second_market_sell(&self, sale_request: crate::models::SecondMarketSaleRequest) -> Result<ApiResultSecondMarketSale,String> {
         
-        let token = &self.configuration.token;
+        let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::POST)
             .header(header::AUTHORIZATION, format!("Bearer {token}"))
             .header(header::CONTENT_TYPE, "application/json");
 
-        let uri_str = format!("{}/api/v1/secondarymarket/sell", self.configuration.base_path);
+        let uri_str = format!("{}/api/v1/secondarymarket/sell", self.base_path);
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         let serialized = serde_json::to_string(&sale_request).unwrap();
@@ -470,13 +458,7 @@ impl SecondMarketApi for APIClient {
 
         let req = builder.body(hyper::Body::from(serialized)).unwrap();
 
-        let https = hyper_rustls::HttpsConnectorBuilder::new()
-            .with_native_roots()
-            .https_only()
-            .enable_http1().build();
-
-        let client = hyper::Client::builder().build(https);
-        let resp = client.request(req).await;
+        let resp = self.client.request(req).await;
 
         match resp {
             Ok(mut resp) => {

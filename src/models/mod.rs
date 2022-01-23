@@ -112,6 +112,3 @@ mod second_market_sale_response;
 pub use self::second_market_sale_response::SecondMarketSaleResponse;
 mod second_market_sell;
 pub use self::second_market_sell::SecondMarketSell;
-
-// TODO(farcaller): sort out files
-pub struct File;
