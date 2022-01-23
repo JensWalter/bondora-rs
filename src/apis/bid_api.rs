@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use hyper;
 use serde_json;
-use crate::apis::APIClient;
+use crate::Client;
 use crate::models::ApiResult;
 use crate::models::ApiResultBid;
 use crate::models::ApiResultBids;
@@ -17,7 +17,7 @@ pub trait BidApi {
 }
 
 #[async_trait]
-impl BidApi for APIClient {
+impl BidApi for Client {
     async fn bid_cancel_bid(&self, id: &str) -> Result<ApiResult,String> {
 
         let token = &self.token;

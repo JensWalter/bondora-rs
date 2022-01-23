@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use hyper;
 use serde_json;
-use crate::apis::APIClient;
+use crate::Client;
 use crate::models::ApiResultReport;
 use crate::models::ApiResultCreateReport;
 use crate::models::ApiResultReportList;
@@ -18,7 +18,7 @@ pub trait ReportApi {
 }
 
 #[async_trait]
-impl ReportApi for APIClient {
+impl ReportApi for Client {
     async fn report_generate_report(&self, request: crate::models::ReportCreateRequest) -> Result<ApiResultCreateReport,String> {
         
         let token = &self.token;

@@ -1,9 +1,6 @@
 use hyper;
 use serde;
 use serde_json;
-use hyper::Client;
-use hyper_rustls::HttpsConnector;
-use hyper::client::HttpConnector;
 
 #[derive(Debug)]
 pub enum Error<T> {
@@ -61,26 +58,3 @@ mod report_api;
 pub use self::report_api::{ ReportApi };
 mod second_market_api;
 pub use self::second_market_api::{ SecondMarketApi };
-
-pub struct APIClient {
-    pub base_path: String,
-    pub token: String,
-    pub client: Client<HttpsConnector<HttpConnector>>,
-  }
-  
-  impl APIClient {
-    pub fn new(token: String) -> APIClient {
-      let https = hyper_rustls::HttpsConnectorBuilder::new()
-              .with_native_roots()
-              .https_only()
-              .enable_http1()
-              .build();
-      let client = hyper::Client::builder().build(https);
-      APIClient {
-        base_path: "https://api.bondora.com".to_string(),
-        token,
-        client,
-      }
-    }
-  }
-  

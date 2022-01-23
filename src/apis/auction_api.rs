@@ -1,6 +1,6 @@
 use hyper;
 use serde_json;
-use crate::apis::APIClient;
+use crate::Client;
 use crate::models::ApiResultExtendedAuction;
 use crate::models::ApiResultAuctions;
 use crate::models::AuctionRequest;
@@ -15,7 +15,7 @@ pub trait AuctionApi {
 }
 
 #[async_trait]
-impl AuctionApi for APIClient {
+impl AuctionApi for Client {
     async fn auction_get(&self, id: &str) -> Result<ApiResultExtendedAuction,String> {
 
         let token = &self.token;

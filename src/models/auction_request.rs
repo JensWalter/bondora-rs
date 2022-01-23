@@ -1,9 +1,4 @@
-
 /// AuctionRequest : Request object for filtering auctions
-
-#[allow(unused_imports)]
-use serde_json::Value;
-
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct AuctionRequest {
   /// Two letter iso code for country of origin: EE, ES, FI

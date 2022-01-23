@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use hyper;
 use serde_json;
-use crate::apis::APIClient;
+use crate::Client;
 use crate::models::ApiResult;
 use crate::models::ApiResultLoanPartDetails;
 use crate::models::ApiResultSecondMarket;
@@ -38,7 +38,7 @@ pub trait SecondMarketApi {
 }
 
 #[async_trait]
-impl SecondMarketApi for APIClient {
+impl SecondMarketApi for Client {
     async fn second_market_buy(&self, buy_request: crate::models::SecondMarketBuyRequest)
      -> Result<ApiResult,String> {
 
