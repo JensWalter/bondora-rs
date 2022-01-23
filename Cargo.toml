@@ -1,11 +1,12 @@
 [package]
 name = "bondora"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Jens Walter <jens@apimeister.com>"]
 license = "Apache-2.0"
 description = "Bondora API client"
 repository = "https://github.com/JensWalter/bondora-rs"
+documentation = "https://docs.rs/bondora"
 
 [dependencies]
 serde = "1.0"

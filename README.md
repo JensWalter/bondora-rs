@@ -22,3 +22,7 @@ async fn main() {
     println!("{:?}", result);
 }
 ```
+
+## Generate your API key
+
+Head over to [https://api.bondora.com/Application](https://api.bondora.com/Application) and register you App with Bondora. After taht you can generate an API key within the UI.
