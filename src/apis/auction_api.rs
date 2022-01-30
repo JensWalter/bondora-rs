@@ -162,7 +162,7 @@ impl AuctionApi for Client {
                     Err(err) => Err(format!("{:?}",err)),
                 }
             }
-            Err(err) => Err(format!("{:?}",err)),
+            Err(err) => Err(format!("{:?} response payload= {}",err,result)),
         }
     }
 
