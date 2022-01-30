@@ -159,10 +159,10 @@ impl AuctionApi for Client {
                 let result = String::from_utf8(bytes.into_iter().collect()).expect("");
                 match serde_json::from_str(&result) {
                     Ok(data) => Ok(data),
-                    Err(err) => Err(format!("{:?}",err)),
+                    Err(err) => Err(format!("{:?} response payload= {}",err,result)),
                 }
             }
-            Err(err) => Err(format!("{:?} response payload= {}",err,result)),
+            Err(err) => Err(format!("{:?}",err)),
         }
     }
 
