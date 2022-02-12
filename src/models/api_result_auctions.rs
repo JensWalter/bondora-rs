@@ -9,10 +9,10 @@ pub struct ApiResultAuctions {
   pub page_nr: Option<i32>,
   /// Total number of items found
   #[serde(rename = "TotalCount")]
-  pub total_count: i32,
+  pub total_count: Option<i32>,
   /// Number of items returned
   #[serde(rename = "Count")]
-  pub count: i32,
+  pub count: Option<i32>,
   /// The payload of the response. Type depends on the API request.
   #[serde(rename = "Payload")]
   pub payload: Option<Vec<crate::models::Auction>>,
