@@ -1,6 +1,6 @@
 [package]
 name = "bondora"
-version = "0.2.2"
+version = "0.2.3"
 edition = "2021"
 authors = ["Jens Walter <jens@apimeister.com>"]
 license = "Apache-2.0"
@@ -11,7 +11,7 @@ documentation = "https://docs.rs/bondora"
 [dependencies]
 serde = "1.0"
 serde_derive = "1.0"
-serde_yaml = "0.8"
+serde_yaml = "0.9"
 serde_json = "1.0"
 base64 = "0.13"
 futures = "0.3"
