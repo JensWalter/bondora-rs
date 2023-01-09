@@ -1,23 +1,24 @@
-use hyper;
-use serde_json;
-use crate::Client;
-use crate::models::ApiResultExtendedAuction;
 use crate::models::ApiResultAuctions;
+use crate::models::ApiResultExtendedAuction;
 use crate::models::AuctionRequest;
-use hyper::{Method,header};
+use crate::Client;
 use async_trait::async_trait;
+use hyper;
+use hyper::{header, Method};
+use serde_json;
 
 #[async_trait]
 pub trait AuctionApi {
-    async fn auction_get(&self, id: &str) -> Result<ApiResultExtendedAuction,String>;
-    async fn auction_get_active(&self, options: AuctionRequest)
-     -> Result<ApiResultAuctions,String>;
+    async fn auction_get(&self, id: &str) -> Result<ApiResultExtendedAuction, String>;
+    async fn auction_get_active(
+        &self,
+        options: AuctionRequest,
+    ) -> Result<ApiResultAuctions, String>;
 }
 
 #[async_trait]
 impl AuctionApi for Client {
-    async fn auction_get(&self, id: &str) -> Result<ApiResultExtendedAuction,String> {
-
+    async fn auction_get(&self, id: &str) -> Result<ApiResultExtendedAuction, String> {
         let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::GET)
@@ -27,7 +28,12 @@ impl AuctionApi for Client {
             let mut query = ::url::form_urlencoded::Serializer::new(String::new());
             query.finish()
         };
-        let uri_str = format!("{}/api/v1/auction/{id}?{}", self.base_path, query_string, id=id);
+        let uri_str = format!(
+            "{}/api/v1/auction/{id}?{}",
+            self.base_path,
+            query_string,
+            id = id
+        );
         let uri: hyper::Uri = uri_str.parse().unwrap();
 
         builder = builder.uri(uri);
@@ -41,28 +47,29 @@ impl AuctionApi for Client {
                 let result = String::from_utf8(bytes.into_iter().collect()).expect("");
                 match serde_json::from_str(&result) {
                     Ok(data) => Ok(data),
-                    Err(err) => Err(format!("{:?}",err)),
+                    Err(err) => Err(format!("{:?}", err)),
                 }
             }
-            Err(err) => Err(format!("{:?}",err)),
+            Err(err) => Err(format!("{:?}", err)),
         }
     }
 
-    async fn auction_get_active(&self, options: AuctionRequest)
-     -> Result<ApiResultAuctions,String> {
-
+    async fn auction_get_active(
+        &self,
+        options: AuctionRequest,
+    ) -> Result<ApiResultAuctions, String> {
         let token = &self.token;
         let mut builder = hyper::Request::builder()
             .method(Method::GET)
             .header(header::AUTHORIZATION, format!("Bearer {token}"));
-        
+
         let query_string = {
             let mut query = ::url::form_urlencoded::Serializer::new(String::new());
             if let Some(x) = &options.countries {
-                query.append_pair("request.countries", &x.join(",").to_string());
+                query.append_pair("request.countries", &x.join(","));
             }
             if let Some(x) = &options.ratings {
-                query.append_pair("request.ratings", &x.join(",").to_string());
+                query.append_pair("request.ratings", &x.join(","));
             }
             if let Some(x) = &options.gender {
                 query.append_pair("request.gender", &x.to_string());
@@ -74,7 +81,7 @@ impl AuctionApi for Client {
                 query.append_pair("sumMax", &x.to_string());
             }
             if let Some(x) = &options.terms {
-                let terms_str: String = x.iter().map( |&id| id.to_string() + ",").collect();
+                let terms_str: String = x.iter().map(|&id| id.to_string() + ",").collect();
                 query.append_pair("request.terms", &terms_str);
             }
             if let Some(x) = &options.age_min {
@@ -102,7 +109,7 @@ impl AuctionApi for Client {
                 query.append_pair("request.creditScoreMax", &x.to_string());
             }
             if let Some(x) = &options.credit_scores_ee_mini {
-                query.append_pair("request.creditScoresEeMini", &x.join(",").to_string());
+                query.append_pair("request.creditScoresEeMini", &x.join(","));
             }
             if let Some(x) = &options.interest_min {
                 query.append_pair("request.interestMin", &x.to_string());
@@ -148,7 +155,8 @@ impl AuctionApi for Client {
         let https = hyper_rustls::HttpsConnectorBuilder::new()
             .with_native_roots()
             .https_only()
-            .enable_http1().build();
+            .enable_http1()
+            .build();
 
         let client = hyper::Client::builder().build(https);
         let resp = client.request(req).await;
@@ -159,11 +167,10 @@ impl AuctionApi for Client {
                 let result = String::from_utf8(bytes.into_iter().collect()).expect("");
                 match serde_json::from_str(&result) {
                     Ok(data) => Ok(data),
-                    Err(err) => Err(format!("{:?} response payload= {}",err,result)),
+                    Err(err) => Err(format!("{:?} response payload= {}", err, result)),
                 }
             }
-            Err(err) => Err(format!("{:?}",err)),
+            Err(err) => Err(format!("{:?}", err)),
         }
     }
-
 }
